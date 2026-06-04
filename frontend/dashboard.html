@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REALYTICS | Dashboard</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #141414;
+            --bg-tertiary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #e0e0e0;
+            --text-muted: #888888;
+            --border-color: #2a2a2a;
+            --accent: #d4af37;
+            --accent-hover: #c0a030;
+            --error: #f44336;
+            --success: #4caf50;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f5f5f5;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e8e8e8;
+            --text-primary: #1a1a1a;
+            --text-secondary: #333333;
+            --text-muted: #666666;
+            --border-color: #d0d0d0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            line-height: 1.5;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .header {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .logo-image {
+            height: 40px;
+            width: auto;
+            display: block;
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .btn-danger {
+            background: transparent;
+            border: 1px solid var(--error);
+            color: var(--error);
+            padding: 4px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .btn-danger:hover {
+            background: rgba(244, 67, 54, 0.1);
+        }
+
+        /* Stats Cards */
+        .stats-dashboard {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        /* Filters */
+        .filters-bar {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+        }
+
+        .filter-select {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .search-input {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 6px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        /* Table */
+        .table-container {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--bg-tertiary);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge.ai {
+            background: rgba(244, 67, 54, 0.15);
+            border: 1px solid var(--error);
+            color: var(--error);
+        }
+
+        .badge.human {
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .expand-btn {
+            background: transparent;
+            border: none;
+            color: var(--accent);
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .expandable-row {
+            display: none;
+            background: var(--bg-tertiary);
+        }
+
+        .expandable-row.show {
+            display: table-row;
+        }
+
+        .expandable-content {
+            padding: 20px;
+        }
+
+        /* Skeleton Loader */
+        .skeleton {
+            background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--bg-secondary) 50%, var(--bg-tertiary) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 4px;
+            height: 20px;
+            margin: 8px 0;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--success);
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 1100;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .feedback-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--accent);
+            color: #0a0a0a;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            border: none;
+        }
+        @media (max-width: 768px) {
+            .logo-image {
+                height: 32px;
+            }
+            .logo-text {
+                font-size: 16px;
+            }
+            .logo-text span {
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-dashboard {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .filters-bar {
+                flex-direction: column;
+            }
+            th, td {
+                padding: 12px;
+                font-size: 13px;
+            }
+            .container {
+                padding: 0 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="container">
+        <div class="header-inner">
+            <a href="/" class="logo-link">
+                <img src="/logo.png" alt="REALYTICS Logo" class="logo-image">
+                <span class="logo-text">REALYTICS</span>
+            </a>
+            <div class="nav">
+                <span id="userEmail" style="color: var(--text-muted); font-size: 13px;"></span>
+                <button class="theme-toggle" id="themeToggle" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 30px; padding: 6px 12px; cursor: pointer;">🌙</button>
+                <a href="/app" class="btn-outline" style="text-decoration: none;">New analysis</a>
+                <button id="logoutBtn" class="btn-outline">Sign out</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <h1 style="margin: 30px 0 20px; font-size: 28px;">Dashboard</h1>
+
+    <!-- Stats Cards -->
+    <div class="stats-dashboard" id="statsCards">
+        <div class="stat-card"><div class="skeleton" style="height: 50px;"></div></div>
+        <div class="stat-card"><div class="skeleton" style="height: 50px;"></div></div>
+        <div class="stat-card"><div class="skeleton" style="height: 50px;"></div></div>
+        <div class="stat-card"><div class="skeleton" style="height: 50px;"></div></div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-bar">
+        <select id="typeFilter" class="filter-select">
+            <option value="">All Types</option>
+            <option value="image">Images</option>
+            <option value="video">Videos</option>
+            <option value="text">Text</option>
+        </select>
+        <select id="resultFilter" class="filter-select">
+            <option value="">All Results</option>
+            <option value="ai">AI Generated</option>
+            <option value="human">Human Created</option>
+        </select>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search by filename...">
+        <button id="resetFilters" class="btn-outline" style="padding: 8px 16px;">Reset</button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Filename</th>
+                    <th>Result</th>
+                    <th>Confidence</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="historyTableBody">
+                <tr><td colspan="6"><div class="skeleton" style="height: 40px;"></div><div class="skeleton" style="height: 40px; margin-top: 8px;"></div><div class="skeleton" style="height: 40px; margin-top: 8px;"></div></td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<button class="feedback-btn" id="feedbackBtn">💬</button>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <h3 style="margin-bottom: 16px;">Delete Analysis</h3>
+        <p>Are you sure you want to delete this analysis? This action cannot be undone.</p>
+        <div class="modal-buttons">
+            <button id="cancelDeleteBtn" class="btn-outline">Cancel</button>
+            <button id="confirmDeleteBtn" class="btn-outline" style="border-color: var(--error); color: var(--error);">Delete</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_BASE = '';
+    let allHistory = [];
+    let deleteId = null;
+
+    function showToast(message, isError = false) {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.style.borderLeftColor = isError ? '#f44336' : '#4caf50';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    async function loadStats() {
+        try {
+            const res = await fetch(`${API_BASE}/api/history`);
+            const history = await res.json();
+            const total = history.length;
+            const aiCount = history.filter(h => h.is_ai).length;
+            const avgConfidence = history.length ? (history.reduce((sum, h) => sum + h.confidence, 0) / history.length).toFixed(1) : 0;
+            const mostCommon = aiCount > total/2 ? 'AI Generated' : 'Human Created';
+            
+            document.getElementById('statsCards').innerHTML = `
+                <div class="stat-card"><div class="stat-value">${total}</div><div class="stat-label">Total Analyses</div></div>
+                <div class="stat-card"><div class="stat-value">${aiCount}</div><div class="stat-label">AI Detected</div></div>
+                <div class="stat-card"><div class="stat-value">${avgConfidence}%</div><div class="stat-label">Avg Confidence</div></div>
+                <div class="stat-card"><div class="stat-value">${mostCommon}</div><div class="stat-label">Most Common</div></div>
+            `;
+        } catch(e) {
+            console.error('Error loading stats:', e);
+        }
+    }
+
+    async function loadHistory() {
+        try {
+            const res = await fetch(`${API_BASE}/api/history`);
+            if (res.status === 401) {
+                window.location.href = '/login';
+                return;
+            }
+            allHistory = await res.json();
+            applyFilters();
+            loadStats();
+        } catch(e) {
+            console.error('Error loading history:', e);
+        }
+    }
+
+    function applyFilters() {
+        const typeFilter = document.getElementById('typeFilter').value;
+        const resultFilter = document.getElementById('resultFilter').value;
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        
+        let filtered = [...allHistory];
+        
+        if (typeFilter) {
+            filtered = filtered.filter(h => h.media_type === typeFilter);
+        }
+        if (resultFilter) {
+            filtered = filtered.filter(h => resultFilter === 'ai' ? h.is_ai : !h.is_ai);
+        }
+        if (searchTerm) {
+            filtered = filtered.filter(h => h.filename.toLowerCase().includes(searchTerm));
+        }
+        
+        renderTable(filtered);
+    }
+
+    async function deleteAnalysis(id) {
+        try {
+            const res = await fetch(`${API_BASE}/api/delete/${id}`, { method: 'DELETE' });
+            if (res.ok) {
+                showToast('Analysis deleted successfully');
+                loadHistory();
+            } else {
+                showToast('Failed to delete', true);
+            }
+        } catch(e) {
+            showToast('Error deleting', true);
+        }
+    }
+
+    async function loadExplanation(analysisId, elementId) {
+        const container = document.getElementById(elementId);
+        if (container.innerHTML) {
+            container.innerHTML = '';
+            return;
+        }
+        container.innerHTML = '<div style="padding: 16px; color: var(--text-muted);">Loading explanation...</div>';
+        try {
+            const res = await fetch(`${API_BASE}/api/explain/${analysisId}`);
+            const data = await res.json();
+            if (data.success && data.explanation) {
+                container.innerHTML = `<div style="padding: 16px; background: var(--bg-tertiary); border-radius: 8px; margin-top: 12px;">${data.explanation}</div>`;
+            }
+        } catch(e) {
+            container.innerHTML = '<div style="padding: 16px; color: var(--error);">Error loading explanation</div>';
+        }
+    }
+
+    function toggleExpand(rowId, analysisId) {
+        const expandableRow = document.getElementById(`expandable-${rowId}`);
+        expandableRow.classList.toggle('show');
+        if (expandableRow.classList.contains('show')) {
+            loadExplanation(analysisId, `explanation-${rowId}`);
+        }
+    }
+
+    function renderTable(history) {
+        const tbody = document.getElementById('historyTableBody');
+        if (history.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px;">No analyses found</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = history.map((item, index) => `
+            <tr>
+                <td>${new Date(item.created_at).toLocaleDateString()}</td>
+                <td>${item.media_type.toUpperCase()}</td>
+                <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${item.filename.substring(0, 30)}</td>
+                <td><span class="badge ${item.is_ai ? 'ai' : 'human'}">${item.is_ai ? 'AI' : 'Human'}</span></td>
+                <td>${item.confidence.toFixed(1)}%</td>
+                <td>
+                    <button class="expand-btn" onclick="toggleExpand(${index}, '${item.id}')">▼ Details</button>
+                    <button class="btn-danger" onclick="showDeleteModal('${item.id}')" style="margin-left: 8px;">Delete</button>
+                </td>
+            </tr>
+            <tr id="expandable-${index}" class="expandable-row">
+                <td colspan="6">
+                    <div class="expandable-content">
+                        <strong>Analysis ID:</strong> ${item.id.substring(0, 8)}...<br>
+                        <strong>Full Filename:</strong> ${item.filename}<br>
+                        <div id="explanation-${index}"></div>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function showDeleteModal(id) {
+        deleteId = id;
+        document.getElementById('deleteModal').classList.add('show');
+    }
+
+    function initTheme() {
+        const saved = localStorage.getItem('theme');
+        if (saved === 'light') {
+            document.body.setAttribute('data-theme', 'light');
+            document.getElementById('themeToggle').innerHTML = '☀️';
+        } else {
+            document.body.setAttribute('data-theme', 'dark');
+            document.getElementById('themeToggle').innerHTML = '🌙';
+        }
+    }
+
+    async function checkAuth() {
+        try {
+            const res = await fetch(`${API_BASE}/api/me`);
+            if (res.status === 401) {
+                window.location.href = '/login';
+                return;
+            }
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('userEmail').textContent = data.user.email;
+            }
+        } catch(e) {
+            window.location.href = '/login';
+        }
+    }
+
+    // Event Listeners
+    document.getElementById('themeToggle').addEventListener('click', () => {
+        const current = document.body.getAttribute('data-theme');
+        if (current === 'dark') {
+            document.body.setAttribute('data-theme', 'light');
+            localStorage.setItem('theme', 'light');
+            document.getElementById('themeToggle').innerHTML = '☀️';
+        } else {
+            document.body.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+            document.getElementById('themeToggle').innerHTML = '🌙';
+        }
+    });
+
+    document.getElementById('typeFilter').addEventListener('change', applyFilters);
+    document.getElementById('resultFilter').addEventListener('change', applyFilters);
+    document.getElementById('searchInput').addEventListener('input', applyFilters);
+    document.getElementById('resetFilters').addEventListener('click', () => {
+        document.getElementById('typeFilter').value = '';
+        document.getElementById('resultFilter').value = '';
+        document.getElementById('searchInput').value = '';
+        applyFilters();
+    });
+
+    document.getElementById('cancelDeleteBtn').addEventListener('click', () => {
+        document.getElementById('deleteModal').classList.remove('show');
+        deleteId = null;
+    });
+
+    document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+        if (deleteId) {
+            await deleteAnalysis(deleteId);
+            document.getElementById('deleteModal').classList.remove('show');
+            deleteId = null;
+        }
+    });
+
+    document.getElementById('feedbackBtn').addEventListener('click', () => {
+        const feedback = prompt('Share your feedback to help us improve REALYTICS:');
+        if (feedback) showToast('Thanks for your feedback!');
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+        await fetch(`${API_BASE}/api/logout`, { method: 'POST' });
+        window.location.href = '/';
+    });
+
+    initTheme();
+    checkAuth();
+    loadHistory();
+</script>
+</body>
+</html>
