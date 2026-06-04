@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REALYTICS | Create Account</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #141414;
+            --text-primary: #ffffff;
+            --text-secondary: #e0e0e0;
+            --text-muted: #888888;
+            --border-color: #2a2a2a;
+            --accent: #d4af37;
+            --accent-hover: #c0a030;
+            --error: #f44336;
+            --success: #4caf50;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f5f5f5;
+            --bg-secondary: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #333333;
+            --text-muted: #666666;
+            --border-color: #d0d0d0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .split-screen {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .left-panel {
+            flex: 1;
+            background: linear-gradient(135deg, var(--accent) 0%, #8B6914 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .left-content {
+            text-align: center;
+            color: #0a0a0a;
+        }
+
+        .left-content h1 {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .left-content p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .feature-list {
+            margin-top: 32px;
+            text-align: left;
+        }
+
+        .feature-list li {
+            margin: 12px 0;
+            font-size: 14px;
+        }
+
+        .right-panel {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            background: var(--bg-primary);
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 48px;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 24px 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .divider span {
+            background: var(--bg-secondary);
+            padding: 0 12px;
+            position: relative;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .social-buttons {
+            display: flex;
+            gap: 16px;
+        }
+
+        .social-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .social-btn:hover {
+            border-color: var(--accent);
+        }
+
+        .error {
+            color: var(--error);
+            font-size: 13px;
+            margin-bottom: 16px;
+        }
+        .logo-image {
+            height: 40px;
+            width: auto;
+            display: block;
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .success {
+            color: var(--success);
+            font-size: 13px;
+            margin-bottom: 16px;
+        }
+
+        .link {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 13px;
+        }
+
+        .link a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 8px 16px;
+            cursor: pointer;
+            z-index: 100;
+        }
+        @media (max-width: 768px) {
+            .logo-image {
+                height: 32px;
+            }
+            .logo-text {
+                font-size: 16px;
+            }
+            .logo-text span {
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .split-screen {
+                flex-direction: column;
+            }
+            .left-panel {
+                padding: 60px 20px;
+                min-height: 250px;
+            }
+            .left-content h1 {
+                font-size: 32px;
+            }
+            .feature-list {
+                display: none;
+            }
+            .card {
+                padding: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
+    
+    <div class="split-screen">
+        <div class="left-panel">
+            <div class="left-content">
+                <h1>Join REALYTICS</h1>
+                <img src="/logo.png" alt="REALYTICS Logo" style="height: 80px; width: auto; margin-bottom: 20px;">
+                <p>Start detecting AI content in seconds</p>
+                <ul class="feature-list">
+                    <li>✓ 1 free analysis to try</li>
+                    <li>✓ Save unlimited history</li>
+                    <li>✓ AI-powered explanations</li>
+                    <li>✓ Export PDF reports</li>
+                    <li>✓ Enterprise-grade security</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="right-panel">
+            <div class="card">
+                <h2>Create account</h2>
+                <p class="subtitle">Free. No credit card required.</p>
+                
+                <div id="message"></div>
+                
+                <input type="email" id="email" placeholder="Email address" autocomplete="email">
+                <input type="password" id="password" placeholder="Password (min 6 characters)" autocomplete="new-password">
+                <button class="btn" id="registerBtn">Create free account</button>
+                
+                <div class="divider">
+                    <span>Or sign up with</span>
+                </div>
+                
+                <div class="social-buttons">
+                    <button class="social-btn" id="googleBtn">
+                        <span>G</span> Google
+                    </button>
+                    <button class="social-btn" id="githubBtn">
+                        <span>GH</span> GitHub
+                    </button>
+                </div>
+                
+                <div class="link">
+                    Already have an account? <a href="/login">Sign in</a>
+                </div>
+                <div class="link">
+                    <a href="/">← Back to home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '';
+        
+        function showToast(message, isError = false) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `position: fixed; bottom: 24px; right: 24px; background: var(--bg-secondary); border-left: 4px solid ${isError ? '#f44336' : '#4caf50'}; padding: 12px 20px; border-radius: 8px; z-index: 1100; animation: slideIn 0.3s ease;`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+        
+        function initTheme() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'light') {
+                document.body.setAttribute('data-theme', 'light');
+                document.getElementById('themeToggle').innerHTML = '☀️ Light';
+            } else {
+                document.body.setAttribute('data-theme', 'dark');
+                document.getElementById('themeToggle').innerHTML = '🌙 Dark';
+            }
+        }
+        
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            const current = document.body.getAttribute('data-theme');
+            if (current === 'dark') {
+                document.body.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                document.getElementById('themeToggle').innerHTML = '☀️ Light';
+            } else {
+                document.body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                document.getElementById('themeToggle').innerHTML = '🌙 Dark';
+            }
+        });
+        
+        document.getElementById('registerBtn').addEventListener('click', async () => {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const msgDiv = document.getElementById('message');
+            
+            if (!email || !password) {
+                msgDiv.innerHTML = '<div class="error">Please enter email and password</div>';
+                return;
+            }
+            
+            if (password.length < 6) {
+                msgDiv.innerHTML = '<div class="error">Password must be at least 6 characters</div>';
+                return;
+            }
+            
+            try {
+                const res = await fetch(`${API_BASE}/api/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await res.json();
+                
+                if (data.success) {
+                    msgDiv.innerHTML = '<div class="success">Account created! Redirecting...</div>';
+                    showToast('Account created successfully!');
+                    setTimeout(() => {
+                        window.location.href = '/dashboard';
+                    }, 1500);
+                } else {
+                    msgDiv.innerHTML = `<div class="error">${data.error || 'Registration failed'}</div>`;
+                }
+            } catch (e) {
+                msgDiv.innerHTML = '<div class="error">Network error. Please try again.</div>';
+            }
+        });
+        
+        // Social login placeholders
+        document.getElementById('googleBtn').addEventListener('click', () => {
+            showToast('Google sign up coming soon. Use email for now.');
+        });
+        
+        document.getElementById('githubBtn').addEventListener('click', () => {
+            showToast('GitHub sign up coming soon. Use email for now.');
+        });
+        
+        document.getElementById('password').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') document.getElementById('registerBtn').click();
+        });
+        
+        initTheme();
+    </script>
+</body>
+</html>
