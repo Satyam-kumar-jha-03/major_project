@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="REALYTICS - Enterprise content authentication and deepfake detection">
+    <title>REALYTICS | Enterprise Content Authentication</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #141414;
+            --bg-tertiary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #2a2a2a;
+            --accent: #d4af37;
+            --accent-hover: #c0a030;
+            --error: #f44336;
+            --success: #4caf50;
+            --warning: #ff9800;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f5f5f5;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e8e8e8;
+            --text-primary: #1a1a1a;
+            --text-secondary: #333333;
+            --text-muted: #666666;
+            --border-color: #d0d0d0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            line-height: 1.5;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        /* Header */
+        .header {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: -0.5px;
+            text-decoration: none;
+        }
+
+        .logo span {
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--text-muted);
+            display: block;
+        }
+        .logo-image {
+            height: 40px;
+            width: auto;
+            display: block;
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        /* Right side group */
+        .right-group {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Model Status Indicator */
+        .model-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 500;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .model-status.online {
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .model-status.online .status-dot {
+            background: var(--success);
+            box-shadow: 0 0 8px var(--success);
+        }
+
+        .model-status.offline {
+            border-color: var(--error);
+            color: var(--error);
+        }
+
+        .model-status.offline .status-dot {
+            background: var(--error);
+        }
+
+        .model-status.demo {
+            border-color: var(--warning);
+            color: var(--warning);
+        }
+
+        .model-status.demo .status-dot {
+            background: var(--warning);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Profile Section */
+        .profile-section {
+            position: relative;
+        }
+
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 12px 6px 8px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .profile-btn:hover {
+            border-color: var(--accent);
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .profile-avatar {
+            width: 32px;
+            height: 32px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0a0a0a;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .profile-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            min-width: 200px;
+            overflow: hidden;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .profile-section.active .profile-dropdown {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 13px;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+
+        .dropdown-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 4px 0;
+        }
+
+        /* Auth buttons when not logged in */
+        .auth-buttons {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #0a0a0a;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-outline:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .theme-toggle {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 60px 0 40px;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-content p {
+            font-size: 18px;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .trust-badge {
+            display: flex;
+            gap: 24px;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .trust-item {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* Live Demo */
+        .live-demo {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .demo-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+
+        .demo-tab {
+            padding: 8px 20px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .demo-tab.active {
+            background: var(--accent);
+            color: #0a0a0a;
+        }
+
+        .demo-area {
+            text-align: center;
+            min-height: 300px;
+        }
+
+        .demo-upload {
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 40px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-secondary);
+        }
+
+        .demo-upload:hover {
+            border-color: var(--accent);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 60px 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 24px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .stat-note {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 8px;
+            opacity: 0.7;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .faq-grid {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 0;
+        }
+
+        .faq-question {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            margin-top: 12px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            display: none;
+        }
+
+        .faq-answer.active {
+            display: block;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--accent);
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 1100;
+            animation: slideIn 0.3s ease;
+            color: var(--text-secondary);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Feedback Button */
+        .feedback-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--accent);
+            color: #0a0a0a;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            border: none;
+            font-size: 20px;
+        }
+
+        .footer {
+            padding: 40px 0;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 12px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        @media (max-width: 768px) {
+            .logo-image {
+                height: 32px;
+            }
+            .logo-text {
+                font-size: 16px;
+            }
+            .logo-text span {
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 968px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            .container {
+                padding: 0 20px;
+            }
+            .hero-content h1 {
+                font-size: 36px;
+            }
+            .right-group {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="container">
+        <div class="header-inner">
+            <a href="/" class="logo-link">
+                <img src="/logo.png" alt="REALYTICS Logo" class="logo-image">
+                <div class="logo-text">
+                    REALYTICS
+                    <span>Enterprise Content Authentication</span>
+                </div>
+            </a>
+            <div class="right-group">
+                <!-- Model Status Indicator -->
+                <div id="modelStatus" class="model-status">
+                    <span class="status-dot"></span>
+                    <span id="modelStatusText">Checking...</span>
+                </div>
+                
+                <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
+                
+                <!-- Auth Section - Dynamic based on login state -->
+                <div id="authSection">
+                    <!-- Not logged in - show buttons -->
+                    <div id="notLoggedIn" class="auth-buttons">
+                        <a href="/login" class="btn-outline" style="padding: 8px 16px; text-decoration: none;">Sign in</a>
+                        <a href="/register" class="btn-primary" style="padding: 8px 16px; text-decoration: none;">Get Started</a>
+                    </div>
+                    
+                    <!-- Logged in - show profile -->
+                    <div id="loggedIn" class="profile-section" style="display: none;">
+                        <div class="profile-btn" id="profileBtn">
+                            <div class="profile-avatar" id="userAvatar">U</div>
+                            <span class="profile-name" id="userName">User</span>
+                            <span>▼</span>
+                        </div>
+                        <div class="profile-dropdown" id="profileDropdown">
+                            <div class="dropdown-item" id="profileEmail" style="opacity: 0.7; cursor: default;">
+                                📧 <span id="userEmailDisplay">user@example.com</span>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <a href="/dashboard" class="dropdown-item">
+                                📊 Dashboard
+                            </a>
+                            <a href="/app" class="dropdown-item">
+                                🔍 New Analysis
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-item" id="logoutBtn">
+                                🚪 Sign Out
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<main>
+    <div class="container">
+        <div class="hero">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <h1>REALYTICS AI powered content detection system</h1>
+                    <p>Enterprise-grade deepfake detection for images, videos, and text. Trusted by security professionals worldwide.</p>
+                    <div class="trust-badge">
+                        <div class="trust-item">✓ SOC 2 Type II</div>
+                        <div class="trust-item">✓ GDPR Compliant</div>
+                        <div class="trust-item">✓ Enterprise Ready</div>
+                    </div>
+                </div>
+                <div class="live-demo">
+                    <div class="demo-tabs">
+                        <button class="demo-tab active" data-demo="image">Image</button>
+                        <button class="demo-tab" data-demo="video">Video</button>
+                        <button class="demo-tab" data-demo="text">Text</button>
+                    </div>
+                    <div class="demo-area" id="demoArea">
+                        <div class="demo-upload" id="demoUpload">
+                            <div style="font-size: 48px; margin-bottom: 16px;">📸</div>
+                            <p>Drop an image here or click to upload</p>
+                            <p style="font-size: 12px; margin-top: 8px;">JPG, PNG, WebP up to 16MB</p>
+                            <input type="file" id="demoFileInput" accept="image/*" style="display: none;">
+                        </div>
+                        <div id="demoResult" style="display: none; margin-top: 20px;"></div>
+                    </div>
+                    <p style="font-size: 12px; text-align: center; margin-top: 16px; color: var(--text-muted);">Free trial. Create an account for unlimited access.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="stats-section" id="features">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">96%</div>
+                    <div class="stat-label">Detection Accuracy</div>
+                    <div class="stat-note">On real-world test data</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">&lt;3 sec</div>
+                    <div class="stat-label">Image Analysis</div>
+                    <div class="stat-note">Average processing time</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">&lt;10 sec</div>
+                    <div class="stat-label">Video Analysis</div>
+                    <div class="stat-note">Depends on file size</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1 free</div>
+                    <div class="stat-label">Trial Analysis</div>
+                    <div class="stat-note">Then create free account</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-section" id="faq">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How accurate is your detection?
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">Our model achieves 96% accuracy on real-world test data across images, videos, and text. Accuracy varies by content type and quality.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Is my data private and secure?
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">Yes. Files are encrypted during upload and stored securely. We do not share your data with third parties. You can delete your history at any time.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        What file formats are supported?
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">Images: JPG, PNG, WebP. Videos: MP4, AVI, MOV, MKV (max 100MB). Text: Plain text up to 10,000 characters.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Can I use this for my business?
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">Yes. We offer enterprise plans with higher limits, API access, and dedicated support. Contact us for details.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        What makes this different from other detectors?
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">Our hybrid model analyzes multiple features simultaneously and improves over time with user feedback. We also provide detailed AI explanations for every result.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<button class="feedback-btn" id="feedbackBtn">💬</button>
+
+<div class="footer">
+    <div class="container">
+        <p>© 2026 REALYTICS. All rights reserved. Enterprise content authentication.</p>
+    </div>
+</div>
+
+<script>
+    const API_BASE = '';
+    let currentUser = null;
+    
+    // ============================================================================
+    // Model Status Check
+    // ============================================================================
+    async function checkModelStatus() {
+        try {
+            const res = await fetch(`${API_BASE}/api/health`);
+            const data = await res.json();
+            const statusDiv = document.getElementById('modelStatus');
+            const statusText = document.getElementById('modelStatusText');
+            
+            if (data.model && data.model.status === 'online') {
+                statusDiv.className = 'model-status online';
+                statusText.textContent = 'AI Model Online';
+            } else if (data.model && data.model.status === 'demo_mode') {
+                statusDiv.className = 'model-status demo';
+                statusText.textContent = 'Demo Mode';
+            } else {
+                statusDiv.className = 'model-status offline';
+                statusText.textContent = 'Model Offline';
+            }
+        } catch(e) {
+            const statusDiv = document.getElementById('modelStatus');
+            statusDiv.className = 'model-status offline';
+            document.getElementById('modelStatusText').textContent = 'Connection Error';
+        }
+    }
+    
+    // ============================================================================
+    // Auth Check
+    // ============================================================================
+    async function checkAuth() {
+        try {
+            const res = await fetch(`${API_BASE}/api/me`);
+            if (res.ok) {
+                const data = await res.json();
+                currentUser = data.user;
+                showLoggedInUI(currentUser);
+            } else {
+                currentUser = null;
+                showLoggedOutUI();
+            }
+        } catch(e) {
+            currentUser = null;
+            showLoggedOutUI();
+        }
+    }
+    
+    function showLoggedInUI(user) {
+        document.getElementById('notLoggedIn').style.display = 'none';
+        const loggedInDiv = document.getElementById('loggedIn');
+        loggedInDiv.style.display = 'block';
+        
+        // Get initials for avatar
+        const email = user.email;
+        const initial = email.charAt(0).toUpperCase();
+        document.getElementById('userAvatar').textContent = initial;
+        document.getElementById('userName').textContent = email.split('@')[0];
+        document.getElementById('userEmailDisplay').textContent = email;
+    }
+    
+    function showLoggedOutUI() {
+        document.getElementById('notLoggedIn').style.display = 'flex';
+        document.getElementById('loggedIn').style.display = 'none';
+    }
+    
+    // ============================================================================
+    // Toast Notification
+    // ============================================================================
+    function showToast(message) {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+    
+    // ============================================================================
+    // Profile Dropdown
+    // ============================================================================
+    document.getElementById('profileBtn')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const section = document.getElementById('loggedIn');
+        section.classList.toggle('active');
+    });
+    
+    document.addEventListener('click', () => {
+        const section = document.getElementById('loggedIn');
+        if (section) section.classList.remove('active');
+    });
+    
+    // ============================================================================
+    // Logout
+    // ============================================================================
+    document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+        await fetch(`${API_BASE}/api/logout`, { method: 'POST' });
+        showToast('Signed out successfully');
+        setTimeout(() => {
+            window.location.href = '/';
+        }, 500);
+    });
+    
+    // ============================================================================
+    // Theme Toggle
+    // ============================================================================
+    function initTheme() {
+        const saved = localStorage.getItem('theme');
+        if (saved === 'light') {
+            document.body.setAttribute('data-theme', 'light');
+            document.getElementById('themeToggle').innerHTML = '☀️ Light';
+        } else {
+            document.body.setAttribute('data-theme', 'dark');
+            document.getElementById('themeToggle').innerHTML = '🌙 Dark';
+        }
+    }
+    
+    document.getElementById('themeToggle').addEventListener('click', () => {
+        const current = document.body.getAttribute('data-theme');
+        if (current === 'dark') {
+            document.body.setAttribute('data-theme', 'light');
+            localStorage.setItem('theme', 'light');
+            document.getElementById('themeToggle').innerHTML = '☀️ Light';
+            showToast('Light mode activated');
+        } else {
+            document.body.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+            document.getElementById('themeToggle').innerHTML = '🌙 Dark';
+            showToast('Dark mode activated');
+        }
+    });
+    
+    // ============================================================================
+    // Feedback Button
+    // ============================================================================
+    document.getElementById('feedbackBtn').addEventListener('click', () => {
+        const feedback = prompt('Share your feedback to help us improve REALYTICS:');
+        if (feedback) {
+            showToast('Thanks for your feedback!');
+        }
+    });
+    
+    // ============================================================================
+    // FAQ Accordion
+    // ============================================================================
+    document.querySelectorAll('.faq-question').forEach(q => {
+        q.addEventListener('click', () => {
+            const answer = q.nextElementSibling;
+            answer.classList.toggle('active');
+            q.querySelector('span').textContent = answer.classList.contains('active') ? '−' : '+';
+        });
+    });
+    
+    // ============================================================================
+    // Demo Upload
+    // ============================================================================
+    function setupDemoUpload() {
+        const demoUpload = document.getElementById('demoUpload');
+        const demoFileInput = document.getElementById('demoFileInput');
+        if (demoUpload && demoFileInput) {
+            demoUpload.addEventListener('click', () => demoFileInput.click());
+            demoFileInput.addEventListener('change', (e) => {
+                if (e.target.files[0]) {
+                    showToast(currentUser ? 'Redirecting to analysis...' : 'Create an account to analyze content');
+                    if (!currentUser) {
+                        setTimeout(() => {
+                            window.location.href = '/register';
+                        }, 1500);
+                    } else {
+                        window.location.href = '/app';
+                    }
+                }
+            });
+        }
+    }
+    
+    document.querySelectorAll('.demo-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            const demoType = tab.dataset.demo;
+            const demoArea = document.getElementById('demoArea');
+            if (demoType === 'image') {
+                demoArea.innerHTML = `
+                    <div class="demo-upload" id="demoUpload">
+                        <div style="font-size: 48px; margin-bottom: 16px;">📸</div>
+                        <p>Drop an image here or click to upload</p>
+                        <p style="font-size: 12px; margin-top: 8px;">JPG, PNG, WebP up to 16MB</p>
+                        <input type="file" id="demoFileInput" accept="image/*" style="display: none;">
+                    </div>
+                    <div id="demoResult" style="display: none; margin-top: 20px;"></div>
+                `;
+                setupDemoUpload();
+            } else if (demoType === 'video') {
+                demoArea.innerHTML = `
+                    <div class="demo-upload" id="demoUpload">
+                        <div style="font-size: 48px; margin-bottom: 16px;">🎬</div>
+                        <p>Drop a video here or click to upload</p>
+                        <p style="font-size: 12px; margin-top: 8px;">MP4, AVI, MOV up to 100MB</p>
+                        <input type="file" id="demoFileInput" accept="video/*" style="display: none;">
+                    </div>
+                    <div id="demoResult" style="display: none; margin-top: 20px;"></div>
+                `;
+                setupDemoUpload();
+            } else {
+                demoArea.innerHTML = `
+                    <textarea id="demoText" rows="6" placeholder="Paste text here to analyze..." style="width: 100%; padding: 16px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-secondary); font-family: monospace;"></textarea>
+                    <button id="demoAnalyzeBtn" class="btn-primary" style="margin-top: 16px; width: 100%;">Analyze Text</button>
+                `;
+                document.getElementById('demoAnalyzeBtn')?.addEventListener('click', () => {
+                    showToast(currentUser ? 'Redirecting to analysis...' : 'Create an account to analyze content');
+                    if (!currentUser) {
+                        setTimeout(() => {
+                            window.location.href = '/register';
+                        }, 1500);
+                    } else {
+                        window.location.href = '/app';
+                    }
+                });
+            }
+        });
+    });
+    
+    // ============================================================================
+    // Initialize
+    // ============================================================================
+    initTheme();
+    checkModelStatus();
+    checkAuth();
+    setupDemoUpload();
+    
+    // Refresh model status every 30 seconds
+    setInterval(checkModelStatus, 30000);
+</script>
+</body>
+</html>
