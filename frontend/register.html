@@ -75,6 +75,7 @@
         .feature-list {
             margin-top: 32px;
             text-align: left;
+            list-style: none;
         }
 
         .feature-list li {
@@ -121,11 +122,38 @@
             color: var(--text-secondary);
             margin-bottom: 16px;
             font-size: 14px;
+            transition: border-color 0.2s;
         }
 
         input:focus {
             outline: none;
             border-color: var(--accent);
+        }
+
+        /* Password Strength */
+        .password-strength {
+            margin-bottom: 16px;
+        }
+
+        .strength-bars {
+            display: flex;
+            gap: 4px;
+            height: 4px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .strength-bars div {
+            flex: 1;
+            background: var(--border-color);
+            transition: background 0.3s ease;
+        }
+
+        #strengthText {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: block;
+            margin-top: 6px;
         }
 
         .btn {
@@ -143,6 +171,13 @@
 
         .btn:hover {
             background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .divider {
@@ -159,6 +194,25 @@
             right: 0;
             height: 1px;
             background: var(--border-color);
+        }
+
+        .logo-image {
+            height: 40px;
+            width: auto;
+            display: block;
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
         }
 
         .divider span {
@@ -186,40 +240,41 @@
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s;
+            font-size: 13px;
+            color: var(--text-secondary);
         }
 
         .social-btn:hover {
             border-color: var(--accent);
+            background: rgba(212, 175, 55, 0.05);
         }
 
         .error {
             color: var(--error);
             font-size: 13px;
             margin-bottom: 16px;
+            padding: 10px;
+            background: rgba(244, 67, 54, 0.1);
+            border-radius: 6px;
+            display: none;
         }
-        .logo-image {
-            height: 40px;
-            width: auto;
+
+        .error.show {
             display: block;
-        }
-
-        .logo-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-        }
-
-        .logo-text {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--accent);
         }
 
         .success {
             color: var(--success);
             font-size: 13px;
             margin-bottom: 16px;
+            padding: 10px;
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 6px;
+            display: none;
+        }
+
+        .success.show {
+            display: block;
         }
 
         .link {
@@ -233,6 +288,10 @@
             text-decoration: none;
         }
 
+        .link a:hover {
+            text-decoration: underline;
+        }
+
         .theme-toggle {
             position: fixed;
             top: 20px;
@@ -243,7 +302,38 @@
             padding: 8px 16px;
             cursor: pointer;
             z-index: 100;
+            color: var(--text-secondary);
+            transition: all 0.2s;
         }
+
+        .theme-toggle:hover {
+            border-color: var(--accent);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--bg-secondary);
+            border-left: 4px solid #4caf50;
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 1100;
+            animation: slideIn 0.3s ease;
+            color: var(--text-secondary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .toast-error {
+            border-left-color: #f44336;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
         @media (max-width: 768px) {
             .logo-image {
                 height: 32px;
@@ -251,12 +341,7 @@
             .logo-text {
                 font-size: 16px;
             }
-            .logo-text span {
-                font-size: 10px;
-            }
-        }
-
-        @media (max-width: 768px) {
+            
             .split-screen {
                 flex-direction: column;
             }
@@ -272,9 +357,20 @@
             }
             .card {
                 padding: 32px;
+                max-width: 100%;
+            }
+            .social-buttons {
+                flex-direction: column;
+            }
+            .theme-toggle {
+                top: 12px;
+                right: 12px;
+                padding: 6px 12px;
+                font-size: 12px;
             }
         }
     </style>
+    <link rel="stylesheet" href="style-enhancements.css">
 </head>
 <body>
     <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
@@ -282,15 +378,15 @@
     <div class="split-screen">
         <div class="left-panel">
             <div class="left-content">
-                <h1>Join REALYTICS</h1>
-                <img src="/logo.png" alt="REALYTICS Logo" style="height: 80px; width: auto; margin-bottom: 20px;">
-                <p>Start detecting AI content in seconds</p>
-                <ul class="feature-list">
-                    <li>✓ 1 free analysis to try</li>
-                    <li>✓ Save unlimited history</li>
-                    <li>✓ AI-powered explanations</li>
-                    <li>✓ Export PDF reports</li>
-                    <li>✓ Enterprise-grade security</li>
+                <img src="/logo.png" alt="REALYTICS Logo" style="height: 85px; width: auto; margin-bottom: 20px; filter: drop-shadow(0 0 20px rgba(212,175,55,0.4));">
+                <h1 style="font-size: 38px; font-weight: 800; background: linear-gradient(135deg, #ffffff 0%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px;">Join REALYTICS</h1>
+                <p style="font-size: 15px; margin-bottom: 24px; opacity: 0.9;">Start detecting AI content in seconds</p>
+                <ul class="feature-list" style="list-style: none; text-align: left; max-width: 320px; margin: 0 auto;">
+                    <li><i class="fa-solid fa-circle-check" style="color: var(--accent); margin-right: 10px;"></i> 1 free analysis to try</li>
+                    <li><i class="fa-solid fa-circle-check" style="color: var(--accent); margin-right: 10px;"></i> Save unlimited history</li>
+                    <li><i class="fa-solid fa-circle-check" style="color: var(--accent); margin-right: 10px;"></i> AI-powered explanations</li>
+                    <li><i class="fa-solid fa-circle-check" style="color: var(--accent); margin-right: 10px;"></i> Export PDF reports</li>
+                    <li><i class="fa-solid fa-shield-halved" style="color: #4caf50; margin-right: 10px;"></i> Enterprise-grade security</li>
                 </ul>
             </div>
         </div>
@@ -300,10 +396,22 @@
                 <h2>Create account</h2>
                 <p class="subtitle">Free. No credit card required.</p>
                 
-                <div id="message"></div>
+                <div id="errorMsg" class="error"></div>
+                <div id="successMsg" class="success"></div>
                 
                 <input type="email" id="email" placeholder="Email address" autocomplete="email">
                 <input type="password" id="password" placeholder="Password (min 6 characters)" autocomplete="new-password">
+                
+                <div class="password-strength">
+                    <div class="strength-bars">
+                        <div id="strengthBar1"></div>
+                        <div id="strengthBar2"></div>
+                        <div id="strengthBar3"></div>
+                        <div id="strengthBar4"></div>
+                    </div>
+                    <span id="strengthText">Enter a strong password</span>
+                </div>
+                
                 <button class="btn" id="registerBtn">Create free account</button>
                 
                 <div class="divider">
@@ -312,10 +420,10 @@
                 
                 <div class="social-buttons">
                     <button class="social-btn" id="googleBtn">
-                        <span>G</span> Google
+                        <span style="font-weight:700;">G</span> Google
                     </button>
                     <button class="social-btn" id="githubBtn">
-                        <span>GH</span> GitHub
+                        <span style="font-weight:700;">GH</span> GitHub
                     </button>
                 </div>
                 
@@ -332,14 +440,20 @@
     <script>
         const API_BASE = '';
         
+        // ============================================================================
+        // Toast
+        // ============================================================================
         function showToast(message, isError = false) {
             const toast = document.createElement('div');
-            toast.style.cssText = `position: fixed; bottom: 24px; right: 24px; background: var(--bg-secondary); border-left: 4px solid ${isError ? '#f44336' : '#4caf50'}; padding: 12px 20px; border-radius: 8px; z-index: 1100; animation: slideIn 0.3s ease;`;
+            toast.className = 'toast' + (isError ? ' toast-error' : '');
             toast.textContent = message;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
         }
         
+        // ============================================================================
+        // Theme
+        // ============================================================================
         function initTheme() {
             const saved = localStorage.getItem('theme');
             if (saved === 'light') {
@@ -364,20 +478,80 @@
             }
         });
         
-        document.getElementById('registerBtn').addEventListener('click', async () => {
+        // ============================================================================
+        // Password Strength
+        // ============================================================================
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            let score = 0;
+            
+            if (password.length >= 8) score++;
+            if (/[A-Z]/.test(password)) score++;
+            if (/[a-z]/.test(password)) score++;
+            if (/[0-9]/.test(password)) score++;
+            if (/[!@#$%^&*]/.test(password)) score++;
+            
+            const bars = ['strengthBar1', 'strengthBar2', 'strengthBar3', 'strengthBar4'];
+            const colors = ['#f44336', '#ff9800', '#ffeb3b', '#4caf50'];
+            const texts = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong'];
+            
+            bars.forEach((id, i) => {
+                const bar = document.getElementById(id);
+                if (i < Math.min(score, 4)) {
+                    bar.style.background = colors[i];
+                } else {
+                    bar.style.background = 'var(--border-color)';
+                }
+            });
+            
+            const strengthText = document.getElementById('strengthText');
+            if (password.length === 0) {
+                strengthText.textContent = 'Enter a strong password';
+                strengthText.style.color = 'var(--text-muted)';
+            } else if (score <= 1) {
+                strengthText.textContent = 'Weak - add more characters and variety';
+                strengthText.style.color = '#f44336';
+            } else if (score <= 2) {
+                strengthText.textContent = 'Fair - try adding symbols';
+                strengthText.style.color = '#ff9800';
+            } else if (score <= 3) {
+                strengthText.textContent = 'Good - almost there';
+                strengthText.style.color = '#ffeb3b';
+            } else {
+                strengthText.textContent = 'Strong - excellent password!';
+                strengthText.style.color = '#4caf50';
+            }
+        });
+        
+        // ============================================================================
+        // Registration
+        // ============================================================================
+        async function handleRegister() {
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
-            const msgDiv = document.getElementById('message');
+            const errorDiv = document.getElementById('errorMsg');
+            const successDiv = document.getElementById('successMsg');
+            const registerBtn = document.getElementById('registerBtn');
+            
+            errorDiv.classList.remove('show');
+            successDiv.classList.remove('show');
+            errorDiv.textContent = '';
+            successDiv.textContent = '';
             
             if (!email || !password) {
-                msgDiv.innerHTML = '<div class="error">Please enter email and password</div>';
+                errorDiv.textContent = 'Please enter email and password';
+                errorDiv.classList.add('show');
                 return;
             }
             
             if (password.length < 6) {
-                msgDiv.innerHTML = '<div class="error">Password must be at least 6 characters</div>';
+                errorDiv.textContent = 'Password must be at least 6 characters';
+                errorDiv.classList.add('show');
                 return;
             }
+            
+            registerBtn.disabled = true;
+            registerBtn.textContent = 'Creating account...';
             
             try {
                 const res = await fetch(`${API_BASE}/api/register`, {
@@ -389,20 +563,39 @@
                 const data = await res.json();
                 
                 if (data.success) {
-                    msgDiv.innerHTML = '<div class="success">Account created! Redirecting...</div>';
+                    successDiv.textContent = 'Account created! Redirecting...';
+                    successDiv.classList.add('show');
                     showToast('Account created successfully!');
                     setTimeout(() => {
                         window.location.href = '/dashboard';
                     }, 1500);
                 } else {
-                    msgDiv.innerHTML = `<div class="error">${data.error || 'Registration failed'}</div>`;
+                    errorDiv.textContent = data.error || 'Registration failed';
+                    errorDiv.classList.add('show');
+                    registerBtn.disabled = false;
+                    registerBtn.textContent = 'Create free account';
                 }
             } catch (e) {
-                msgDiv.innerHTML = '<div class="error">Network error. Please try again.</div>';
+                errorDiv.textContent = 'Network error. Please try again.';
+                errorDiv.classList.add('show');
+                registerBtn.disabled = false;
+                registerBtn.textContent = 'Create free account';
             }
+        }
+        
+        document.getElementById('registerBtn').addEventListener('click', handleRegister);
+        
+        document.getElementById('password').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleRegister();
         });
         
-        // Social login placeholders
+        document.getElementById('email').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') document.getElementById('password').focus();
+        });
+        
+        // ============================================================================
+        // Social Login
+        // ============================================================================
         document.getElementById('googleBtn').addEventListener('click', () => {
             showToast('Google sign up coming soon. Use email for now.');
         });
@@ -411,11 +604,15 @@
             showToast('GitHub sign up coming soon. Use email for now.');
         });
         
-        document.getElementById('password').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') document.getElementById('registerBtn').click();
-        });
-        
+        // ============================================================================
+        // Initialize
+        // ============================================================================
         initTheme();
+        
+        // Auto-focus email
+        document.getElementById('email').focus();
     </script>
+<script src="bg-animation.js"></script>
+<script src="profile-features.js"></script>
 </body>
 </html>
