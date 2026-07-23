@@ -31,15 +31,15 @@ import keras
 from keras import layers, models
 
 # Import configuration
-from config import (
+from backend.config import (
     FRONTEND_DIR, UPLOAD_FOLDER, DATABASE_URI, MAX_CONTENT_LENGTH,
     ALLOWED_IMAGE_EXTS, ALLOWED_VIDEO_EXTS, DEMO_MODE,
     GEMINI_API_KEY, GEMINI_MODEL, ENABLE_EXPLANATIONS,
     MAX_VIDEO_DURATION_SECONDS, FREE_TRIAL_LIMIT, JWT_SECRET_KEY,
     RETRAIN_THRESHOLD, MODELS_DIR
 )
-from models import db, User, MediaAnalysis, Feedback
-from auth import login_required
+from backend.models import db, User, MediaAnalysis, Feedback
+from backend.auth import login_required
 
 # Optional Gemini import
 try:
