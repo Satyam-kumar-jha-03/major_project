@@ -6,30 +6,24 @@ CONFIG_DIR = Path(__file__).parent
 BACKEND_DIR = CONFIG_DIR
 PROJECT_ROOT = BACKEND_DIR.parent
 
+# Check if running on Render
 IS_RENDER = os.environ.get('RENDER', False)
 
+# The HTML files are in Frontend/src/imports/
+FRONTEND_DIR = PROJECT_ROOT / "Frontend"  
+
+MODELS_DIR = PROJECT_ROOT / "models"
+UPLOAD_FOLDER = BACKEND_DIR / "uploads"
+DATASET_DIR = PROJECT_ROOT / "dataset"
+
+# Create directories (if not on Render or if they don't exist)
+# On Render, use /tmp for uploads and models
 if IS_RENDER:
-    # On Render, use /tmp for uploads (ephemeral storage)
     UPLOAD_FOLDER = Path('/tmp/uploads')
     MODELS_DIR = Path('/tmp/models')
     DATABASE_URI = 'sqlite:////tmp/analysis.db'
 else:
-    # Local development
-    FRONTEND_DIR = PROJECT_ROOT / "Frontend"
-    UPLOAD_FOLDER = BACKEND_DIR / "uploads"
-    MODELS_DIR = PROJECT_ROOT / "models"
     DATABASE_URI = f'sqlite:///{BACKEND_DIR}/analysis.db'
-
-DATASET_DIR = PROJECT_ROOT / "dataset"
-
-# Create directories
-UPLOAD_FOLDER.mkdir(exist_ok=True)
-MODELS_DIR.mkdir(exist_ok=True)
-FRONTEND_DIR.mkdir(exist_ok=True)
-DATASET_DIR.mkdir(exist_ok=True)
-
-# DATABASE
-DATABASE_URI = f'sqlite:///{BACKEND_DIR}/analysis.db'
 
 # FILE UPLOAD
 MAX_CONTENT_LENGTH = 100 * 1024 * 1024
