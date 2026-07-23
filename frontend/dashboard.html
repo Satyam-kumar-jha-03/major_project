@@ -66,13 +66,6 @@
             gap: 16px;
         }
 
-        .logo {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--accent);
-            text-decoration: none;
-        }
-
         .logo-image {
             height: 40px;
             width: auto;
@@ -96,6 +89,7 @@
             display: flex;
             gap: 20px;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .btn-outline {
@@ -106,6 +100,7 @@
             border-radius: 6px;
             cursor: pointer;
             transition: all 0.2s;
+            font-size: 13px;
         }
 
         .btn-outline:hover {
@@ -120,10 +115,27 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 12px;
+            transition: all 0.2s;
         }
 
         .btn-danger:hover {
             background: rgba(244, 67, 54, 0.1);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #0a0a0a;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
         }
 
         /* Stats Cards */
@@ -164,10 +176,12 @@
             display: flex;
             gap: 16px;
             flex-wrap: wrap;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
             padding: 16px;
             background: var(--bg-secondary);
             border-radius: 8px;
+            border: 1px solid var(--border-color);
+            align-items: center;
         }
 
         .filter-select {
@@ -186,7 +200,34 @@
             padding: 8px 16px;
             border-radius: 6px;
             flex: 1;
-            min-width: 200px;
+            min-width: 150px;
+        }
+
+        .date-input {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: auto;
+        }
+
+        /* Bulk Actions */
+        .bulk-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .bulk-actions .count {
+            color: var(--text-muted);
+            font-size: 13px;
         }
 
         /* Table */
@@ -212,6 +253,8 @@
             background: var(--bg-tertiary);
             font-weight: 600;
             color: var(--text-primary);
+            position: sticky;
+            top: 0;
         }
 
         .badge {
@@ -240,6 +283,11 @@
             color: var(--accent);
             cursor: pointer;
             font-size: 12px;
+            padding: 4px 8px;
+        }
+
+        .expand-btn:hover {
+            text-decoration: underline;
         }
 
         .expandable-row {
@@ -253,6 +301,57 @@
 
         .expandable-content {
             padding: 20px;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .pagination .info {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .pagination .controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .pagination button {
+            padding: 6px 12px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .pagination button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .pagination .page-number {
+            padding: 6px 12px;
+            background: var(--accent);
+            border-radius: 4px;
+            color: #0a0a0a;
+            font-weight: 600;
+            font-size: 13px;
         }
 
         /* Skeleton Loader */
@@ -314,6 +413,11 @@
             border-radius: 8px;
             z-index: 1100;
             animation: slideIn 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .toast-error {
+            border-left-color: var(--error);
         }
 
         @keyframes slideIn {
@@ -336,7 +440,20 @@
             cursor: pointer;
             z-index: 1000;
             border: none;
+            font-size: 20px;
+            transition: all 0.2s;
         }
+
+        .feedback-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .row-checkbox {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+        }
+
         @media (max-width: 768px) {
             .logo-image {
                 height: 32px;
@@ -344,27 +461,35 @@
             .logo-text {
                 font-size: 16px;
             }
-            .logo-text span {
-                font-size: 10px;
-            }
-        }
-
-        @media (max-width: 768px) {
             .stats-dashboard {
                 grid-template-columns: repeat(2, 1fr);
             }
             .filters-bar {
                 flex-direction: column;
             }
+            .filters-bar .date-input {
+                width: 100%;
+            }
+            .bulk-actions {
+                flex-wrap: wrap;
+            }
             th, td {
-                padding: 12px;
-                font-size: 13px;
+                padding: 10px;
+                font-size: 12px;
             }
             .container {
                 padding: 0 16px;
             }
+            .pagination {
+                flex-direction: column;
+                text-align: center;
+            }
+            .nav {
+                gap: 10px;
+            }
         }
     </style>
+    <link rel="stylesheet" href="style-enhancements.css">
 </head>
 <body>
 
@@ -409,8 +534,18 @@
             <option value="ai">AI Generated</option>
             <option value="human">Human Created</option>
         </select>
+        <input type="date" id="startDate" class="date-input">
+        <span style="color: var(--text-muted);">to</span>
+        <input type="date" id="endDate" class="date-input">
         <input type="text" id="searchInput" class="search-input" placeholder="Search by filename...">
         <button id="resetFilters" class="btn-outline" style="padding: 8px 16px;">Reset</button>
+    </div>
+
+    <!-- Bulk Actions -->
+    <div class="bulk-actions" id="bulkActions">
+        <span class="count" id="selectedCount">0 selected</span>
+        <button id="bulkDeleteBtn" class="btn-danger" style="display:none; padding: 6px 16px;" onclick="bulkDelete()">🗑️ Delete Selected</button>
+        <button id="bulkExportBtn" class="btn-outline" style="display:none; padding: 6px 16px;" onclick="bulkExport()">📥 Export CSV</button>
     </div>
 
     <!-- Table -->
@@ -418,6 +553,7 @@
         <table>
             <thead>
                 <tr>
+                    <th><input type="checkbox" id="selectAllRows" class="row-checkbox" onchange="toggleAllRows()"></th>
                     <th>Date</th>
                     <th>Type</th>
                     <th>Filename</th>
@@ -427,9 +563,10 @@
                 </tr>
             </thead>
             <tbody id="historyTableBody">
-                <tr><td colspan="6"><div class="skeleton" style="height: 40px;"></div><div class="skeleton" style="height: 40px; margin-top: 8px;"></div><div class="skeleton" style="height: 40px; margin-top: 8px;"></div></td></tr>
+                <tr><td colspan="7"><div class="skeleton" style="height: 40px;"></div><div class="skeleton" style="height: 40px; margin-top: 8px;"></div><div class="skeleton" style="height: 40px; margin-top: 8px;"></div></td></tr>
             </tbody>
         </table>
+        <!-- Pagination will be inserted here -->
     </div>
 </div>
 
@@ -451,16 +588,25 @@
     const API_BASE = '';
     let allHistory = [];
     let deleteId = null;
+    let selectedRows = new Set();
+    let currentPage = 1;
+    const itemsPerPage = 10;
+    let totalItems = 0;
 
+    // ============================================================================
+    // Toast
+    // ============================================================================
     function showToast(message, isError = false) {
         const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.style.borderLeftColor = isError ? '#f44336' : '#4caf50';
+        toast.className = 'toast' + (isError ? ' toast-error' : '');
         toast.textContent = message;
         document.body.appendChild(toast);
         setTimeout(() => toast.remove(), 3000);
     }
 
+    // ============================================================================
+    // Stats
+    // ============================================================================
     async function loadStats() {
         try {
             const res = await fetch(`${API_BASE}/api/history`);
@@ -481,6 +627,9 @@
         }
     }
 
+    // ============================================================================
+    // History
+    // ============================================================================
     async function loadHistory() {
         try {
             const res = await fetch(`${API_BASE}/api/history`);
@@ -489,6 +638,8 @@
                 return;
             }
             allHistory = await res.json();
+            currentPage = 1;
+            selectedRows.clear();
             applyFilters();
             loadStats();
         } catch(e) {
@@ -496,10 +647,15 @@
         }
     }
 
+    // ============================================================================
+    // Filters
+    // ============================================================================
     function applyFilters() {
         const typeFilter = document.getElementById('typeFilter').value;
         const resultFilter = document.getElementById('resultFilter').value;
         const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
         
         let filtered = [...allHistory];
         
@@ -512,10 +668,179 @@
         if (searchTerm) {
             filtered = filtered.filter(h => h.filename.toLowerCase().includes(searchTerm));
         }
+        if (startDate) {
+            filtered = filtered.filter(h => new Date(h.created_at) >= new Date(startDate));
+        }
+        if (endDate) {
+            filtered = filtered.filter(h => new Date(h.created_at) <= new Date(endDate));
+        }
         
+        totalItems = filtered.length;
         renderTable(filtered);
     }
 
+    // ============================================================================
+    // Render Table with Pagination
+    // ============================================================================
+    function renderTable(history) {
+        const tbody = document.getElementById('historyTableBody');
+        
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = Math.min(startIndex + itemsPerPage, history.length);
+        const pageItems = history.slice(startIndex, endIndex);
+        
+        if (pageItems.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px;">No analyses found</td></tr>';
+            renderPagination(history.length);
+            return;
+        }
+        
+        tbody.innerHTML = pageItems.map((item, index) => {
+            const realIndex = startIndex + index;
+            const isChecked = selectedRows.has(item.id) ? 'checked' : '';
+            return `
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox" data-id="${item.id}" ${isChecked} onchange="toggleRow('${item.id}')"></td>
+                    <td>${new Date(item.created_at).toLocaleDateString()}</td>
+                    <td>${item.media_type.toUpperCase()}</td>
+                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${item.filename.substring(0, 30)}</td>
+                    <td><span class="badge ${item.is_ai ? 'ai' : 'human'}">${item.is_ai ? 'AI' : 'Human'}</span></td>
+                    <td>${item.confidence.toFixed(1)}%</td>
+                    <td>
+                        <button class="expand-btn" onclick="toggleExpand(${realIndex}, '${item.id}')">▼ Details</button>
+                        <button class="btn-danger" onclick="showDeleteModal('${item.id}')" style="margin-left: 8px;">Delete</button>
+                    </td>
+                </tr>
+                <tr id="expandable-${realIndex}" class="expandable-row">
+                    <td colspan="7">
+                        <div class="expandable-content">
+                            <strong>Analysis ID:</strong> ${item.id.substring(0, 8)}...<br>
+                            <strong>Full Filename:</strong> ${item.filename}<br>
+                            <div id="explanation-${realIndex}"></div>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+        
+        renderPagination(history.length);
+        updateBulkActions();
+    }
+
+    // ============================================================================
+    // Pagination
+    // ============================================================================
+    function renderPagination(total) {
+        const totalPages = Math.ceil(total / itemsPerPage);
+        const tableContainer = document.querySelector('.table-container');
+        let existingPagination = document.getElementById('paginationControls');
+        if (existingPagination) existingPagination.remove();
+        
+        if (totalPages <= 1) return;
+        
+        const paginationDiv = document.createElement('div');
+        paginationDiv.id = 'paginationControls';
+        paginationDiv.className = 'pagination';
+        paginationDiv.innerHTML = `
+            <span class="info">Showing ${(currentPage-1)*itemsPerPage+1}-${Math.min(currentPage*itemsPerPage, total)} of ${total}</span>
+            <div class="controls">
+                <button onclick="changePage(-1)" ${currentPage === 1 ? 'disabled' : ''}>← Previous</button>
+                <span class="page-number">${currentPage} / ${totalPages}</span>
+                <button onclick="changePage(1)" ${currentPage === totalPages ? 'disabled' : ''}>Next →</button>
+            </div>
+        `;
+        tableContainer.appendChild(paginationDiv);
+    }
+
+    function changePage(direction) {
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+        const newPage = currentPage + direction;
+        if (newPage >= 1 && newPage <= totalPages) {
+            currentPage = newPage;
+            applyFilters();
+            // Scroll to top of table
+            document.querySelector('.table-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    // ============================================================================
+    // Bulk Actions
+    // ============================================================================
+    function toggleAllRows() {
+        const selectAll = document.getElementById('selectAllRows');
+        const checkboxes = document.querySelectorAll('.row-checkbox');
+        checkboxes.forEach(cb => {
+            cb.checked = selectAll.checked;
+            const id = cb.dataset.id;
+            if (selectAll.checked) {
+                selectedRows.add(id);
+            } else {
+                selectedRows.delete(id);
+            }
+        });
+        updateBulkActions();
+    }
+
+    function toggleRow(id) {
+        if (selectedRows.has(id)) {
+            selectedRows.delete(id);
+        } else {
+            selectedRows.add(id);
+        }
+        updateBulkActions();
+        // Update select all state
+        const checkboxes = document.querySelectorAll('.row-checkbox');
+        const checked = document.querySelectorAll('.row-checkbox:checked');
+        document.getElementById('selectAllRows').checked = checkboxes.length > 0 && checkboxes.length === checked.length;
+    }
+
+    function updateBulkActions() {
+        const count = selectedRows.size;
+        document.getElementById('selectedCount').textContent = `${count} selected`;
+        document.getElementById('bulkDeleteBtn').style.display = count > 0 ? 'inline-block' : 'none';
+        document.getElementById('bulkExportBtn').style.display = count > 0 ? 'inline-block' : 'none';
+    }
+
+    async function bulkDelete() {
+        if (selectedRows.size === 0) return;
+        if (!confirm(`Delete ${selectedRows.size} analyses? This cannot be undone.`)) return;
+        
+        let deleted = 0;
+        for (const id of selectedRows) {
+            try {
+                const res = await fetch(`${API_BASE}/api/delete/${id}`, { method: 'DELETE' });
+                if (res.ok) deleted++;
+            } catch(e) {}
+        }
+        selectedRows.clear();
+        showToast(`Deleted ${deleted} analyses`);
+        loadHistory();
+    }
+
+    function bulkExport() {
+        if (selectedRows.size === 0) return;
+        const selectedItems = allHistory.filter(h => selectedRows.has(h.id));
+        
+        let csv = 'Date,Type,Filename,Result,Confidence\n';
+        selectedItems.forEach(item => {
+            csv += `${new Date(item.created_at).toLocaleDateString()},${item.media_type},${item.filename},${item.is_ai ? 'AI' : 'Human'},${item.confidence}\n`;
+        });
+        
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `REALYTICS_export_${Date.now()}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast(`Exported ${selectedItems.length} analyses`);
+    }
+
+    // ============================================================================
+    // Delete Single
+    // ============================================================================
     async function deleteAnalysis(id) {
         try {
             const res = await fetch(`${API_BASE}/api/delete/${id}`, { method: 'DELETE' });
@@ -530,6 +855,14 @@
         }
     }
 
+    function showDeleteModal(id) {
+        deleteId = id;
+        document.getElementById('deleteModal').classList.add('show');
+    }
+
+    // ============================================================================
+    // Explanation
+    // ============================================================================
     async function loadExplanation(analysisId, elementId) {
         const container = document.getElementById(elementId);
         if (container.innerHTML) {
@@ -556,42 +889,9 @@
         }
     }
 
-    function renderTable(history) {
-        const tbody = document.getElementById('historyTableBody');
-        if (history.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px;">No analyses found</td></tr>';
-            return;
-        }
-        
-        tbody.innerHTML = history.map((item, index) => `
-            <tr>
-                <td>${new Date(item.created_at).toLocaleDateString()}</td>
-                <td>${item.media_type.toUpperCase()}</td>
-                <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${item.filename.substring(0, 30)}</td>
-                <td><span class="badge ${item.is_ai ? 'ai' : 'human'}">${item.is_ai ? 'AI' : 'Human'}</span></td>
-                <td>${item.confidence.toFixed(1)}%</td>
-                <td>
-                    <button class="expand-btn" onclick="toggleExpand(${index}, '${item.id}')">▼ Details</button>
-                    <button class="btn-danger" onclick="showDeleteModal('${item.id}')" style="margin-left: 8px;">Delete</button>
-                </td>
-            </tr>
-            <tr id="expandable-${index}" class="expandable-row">
-                <td colspan="6">
-                    <div class="expandable-content">
-                        <strong>Analysis ID:</strong> ${item.id.substring(0, 8)}...<br>
-                        <strong>Full Filename:</strong> ${item.filename}<br>
-                        <div id="explanation-${index}"></div>
-                    </div>
-                </td>
-            </tr>
-        `).join('');
-    }
-
-    function showDeleteModal(id) {
-        deleteId = id;
-        document.getElementById('deleteModal').classList.add('show');
-    }
-
+    // ============================================================================
+    // Theme
+    // ============================================================================
     function initTheme() {
         const saved = localStorage.getItem('theme');
         if (saved === 'light') {
@@ -603,6 +903,9 @@
         }
     }
 
+    // ============================================================================
+    // Auth
+    // ============================================================================
     async function checkAuth() {
         try {
             const res = await fetch(`${API_BASE}/api/me`);
@@ -619,7 +922,31 @@
         }
     }
 
+    // ============================================================================
+    // Keyboard Shortcuts
+    // ============================================================================
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            document.getElementById('deleteModal').classList.remove('show');
+            deleteId = null;
+        }
+        // Ctrl+D - Dashboard (already on dashboard)
+        // Ctrl+Shift+E - Export all
+        if (e.ctrlKey && e.shiftKey && e.key === 'E') {
+            e.preventDefault();
+            if (allHistory.length > 0) {
+                selectedRows = new Set(allHistory.map(h => h.id));
+                updateBulkActions();
+                bulkExport();
+                selectedRows.clear();
+                updateBulkActions();
+            }
+        }
+    });
+
+    // ============================================================================
     // Event Listeners
+    // ============================================================================
     document.getElementById('themeToggle').addEventListener('click', () => {
         const current = document.body.getAttribute('data-theme');
         if (current === 'dark') {
@@ -636,10 +963,15 @@
     document.getElementById('typeFilter').addEventListener('change', applyFilters);
     document.getElementById('resultFilter').addEventListener('change', applyFilters);
     document.getElementById('searchInput').addEventListener('input', applyFilters);
+    document.getElementById('startDate').addEventListener('change', applyFilters);
+    document.getElementById('endDate').addEventListener('change', applyFilters);
+
     document.getElementById('resetFilters').addEventListener('click', () => {
         document.getElementById('typeFilter').value = '';
         document.getElementById('resultFilter').value = '';
         document.getElementById('searchInput').value = '';
+        document.getElementById('startDate').value = '';
+        document.getElementById('endDate').value = '';
         applyFilters();
     });
 
@@ -666,9 +998,15 @@
         window.location.href = '/';
     });
 
+    // ============================================================================
+    // Initialize
+    // ============================================================================
     initTheme();
     checkAuth();
     loadHistory();
+
 </script>
+<script src="bg-animation.js"></script>
+<script src="profile-features.js"></script>
 </body>
 </html>
