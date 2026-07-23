@@ -1,11 +1,14 @@
 import os
 from pathlib import Path
 
-# BASE PATHS - THESE MUST BE DEFINED FIRST
+# BASE PATHS
 CONFIG_DIR = Path(__file__).parent
 BACKEND_DIR = CONFIG_DIR
 PROJECT_ROOT = BACKEND_DIR.parent
-FRONTEND_DIR = PROJECT_ROOT / "frontend"
+
+# The HTML files are in Frontend/src/imports/
+FRONTEND_DIR = PROJECT_ROOT / "Frontend"
+
 MODELS_DIR = PROJECT_ROOT / "models"
 UPLOAD_FOLDER = BACKEND_DIR / "uploads"
 DATASET_DIR = PROJECT_ROOT / "dataset"
